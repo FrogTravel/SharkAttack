@@ -48,6 +48,7 @@ _LAYOUT = dict(
     plot_bgcolor=PAPER,
     font=dict(family="Inter, system-ui, sans-serif", color="#c8d8f0", size=13),
     margin=dict(l=20, r=20, t=52, b=20),
+    autosize=True,
 )
 PLOTLY_CFG = dict(responsive=True, displayModeBar=True, displaylogo=False)
 
@@ -468,6 +469,8 @@ HTML = f"""<!DOCTYPE html>
       border-radius: var(--radius);
       padding: 1.5rem;
       transition: border-color 0.2s;
+      /* min-width:0 lets the grid cell shrink below its content size */
+      min-width: 0;
     }}
     .chart-card:hover {{ border-color: rgba(0,229,255,0.35); }}
     .chart-card.full {{ grid-column: 1 / -1; }}
@@ -646,6 +649,16 @@ HTML = f"""<!DOCTYPE html>
   <p>Data source: Global Shark Attack File (GSAF) — processed and analysed as part of a data-engineering portfolio project.</p>
   <p style="margin-top:0.5rem;">Built with Python · Pandas · Plotly</p>
 </footer>
+
+<script>
+  /* After the page has fully rendered, fire a resize event so every
+     Plotly chart recalculates its width to fit its grid-cell container. */
+  window.addEventListener('load', function () {{
+    setTimeout(function () {{
+      window.dispatchEvent(new Event('resize'));
+    }}, 100);
+  }});
+</script>
 
 </body>
 </html>"""
